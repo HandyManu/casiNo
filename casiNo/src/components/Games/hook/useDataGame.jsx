@@ -12,7 +12,6 @@ const useDataGame = () => {
     const [gameMaxBet, setGameMaxBet] = useState("");
     const [games, setGames] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
 
     const cleanData = () => {
@@ -21,7 +20,6 @@ const useDataGame = () => {
         setGameCategory("");
         setGameMinBet("");
         setGameMaxBet("");
-        
     };
 
     const fetchData = async () => {
@@ -44,18 +42,12 @@ const useDataGame = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!gameName || !gameCategory || !gameMinBet || !gameMaxBet) {
-            setError("Todos los campos son obligatorios");
-            toast.error("Por favor completa todos los campos");
-            return;
-        }
-        setLoading(true);
         try {
             const newGame = {
-                name: gameName,
-                category: gameCategory,
-                gameMinBet: gameMinBet,
-                gameMaxBet: gameMaxBet,
+                nombre: gameName,
+                categoria: gameCategory,
+                apuestaMinima: gameMinBet,
+                apuestaMaxima: gameMaxBet,
             };
             const response = await fetch(ApiGames, {
                 method: "POST",
@@ -63,85 +55,55 @@ const useDataGame = () => {
                 body: JSON.stringify(newGame),
             });
             if (!response.ok) throw new Error("Error al registrar el juego");
-            toast.success(" Juego registrado con éxito");
-            setSuccess("El juego se ha registrado con éxito");
-            cleanData();
-            fetchData();
+        toast.success("Juego añadido correctamente"); // Mostrar alerta
+        fetchData(); // Actualizar la lista de juegos
+        cleanData(); // Limpiar los campos
+        setActiveTab("list"); // Cambiar a la vista de lista
         } catch (error) {
-            setError(error.message);
-            toast.error("Ocurrió un error al registrar el juego");
-        } finally {
-            setLoading(false);
+            toast.error("Error al registrar el juego");
         }
-    };
-
-    const deleteGames = async (id) => {
-        setLoading(true);
-        try {
-            const response = await fetch(`${ApiGames}/${id}`, {
-                method: "DELETE",
-            });
-            if (!response.ok) throw new Error("Error al eliminar el juego");
-            toast.success("Sucrsal eliminada con éxito");
-            fetchData();
-        } catch (error) {
-            setError(error.message);
-            toast.error("Ocurrió un error al eliminar el juego");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const UpdateGames = (dataGames) => {
-        setId(dataGames._id);
-        setBranchName(dataGames.name);
-        setGameCategory(dataGames.category);
-        setGameMinBet(dataGames.gameMinBet);
-        setGameMaxBet(dataGames.gameMaxBet);
-        setError(null);
-        setSuccess(null);
-        setActiveTab("form");
     };
 
     const handleUpdate = async (e) => {
-
         e.preventDefault();
-        if (!gameName || !gameCategory || !gameMinBet || !gameMaxBet) {
-            setError("Todos los campos son obligatorios");
-            toast.error("Por favor completa todos los campos");
-            return;
-        }
-        setLoading(true);
-        console.log("id:", id);
         try {
-            const updateGames = {
-                name: gameName,
-                category: gameCategory,
-                gameMinBet: gameMinBet,
-                gameMaxBet: gameMaxBet,
+            const updatedGame = {
+                nombre: gameName,
+                categoria: gameCategory,
+                apuestaMinima: gameMinBet,
+                apuestaMaxima: gameMaxBet,
             };
             const response = await fetch(`${ApiGames}/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updateGames),
+                body: JSON.stringify(updatedGame),
             });
-            if(!response.ok) throw new Error("Error al actualizar el juego");
-
-            toast.success("El juego se ha  actualizado con éxito");
-            setSuccess("El juego se ha actualizado con éxito");
-            cleanData();
-            //setActiveTab("list");
-            console.log("en funcion update");
-            fetchData();
+            if (!response.ok) throw new Error("Error al actualizar el juego");
+            toast.success("Juego actualizado correctamente");
+            fetchData(); // Actualiza la lista de juegos después de actualizar
+            setActiveTab("list"); // Cambia a la vista de lista
         } catch (error) {
-            setError(error.message);
-            toast.error("Ocurrió un error al actualizar el juego");
-        } finally {
-            setLoading(false);
+            toast.error("Error al actualizar el juego");
         }
     };
 
-    console.log("games:", games);
+    const deleteGames = async (id) => {
+        try {
+            await fetch(`${ApiGames}/${id}`, { method: "DELETE" });
+            fetchData(); // Actualiza los juegos después de eliminar
+        } catch (error) {
+            toast.error("Error al eliminar el juego");
+        }
+    };
+
+    const updateGames = (dataGames) => {
+        setId(dataGames._id);
+        setGameName(dataGames.nombre);
+        setGameCategory(dataGames.categoria);
+        setGameMinBet(dataGames.apuestaMinima);
+        setGameMaxBet(dataGames.apuestaMaxima);
+        setActiveTab("form");
+    };
 
     return {
         activeTab,
@@ -157,18 +119,17 @@ const useDataGame = () => {
         gameMaxBet,
         setGameMaxBet,
         games,
+        setGames,
         loading,
-        success,
+        setLoading,
         error,
+        setError,
         handleSubmit,
-        deleteGames,
-        UpdateGames,
         handleUpdate,
+        deleteGames,
+        updateGames,
         cleanData,
-        
     };
-
-
-}
+};
 
 export default useDataGame;

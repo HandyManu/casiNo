@@ -1,6 +1,6 @@
 import { Schema,model } from "mongoose";
 
-const GamesSchema = new Schema({
+const GameSchema = new Schema({
 
     nombre: {
         type: String,
@@ -23,4 +23,4 @@ const GamesSchema = new Schema({
     strict:false
 })
 
-export default model("Games",GamesSchema );
+export default model("Game",GameSchema );

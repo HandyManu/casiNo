@@ -1,12 +1,11 @@
-import React, { useState, useEffect, use } from "react";
+import React, { useEffect } from "react";
 import RegisterGames from "../components/Games/gameRegister";
 import GameList from "../components/Games/gameList";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 
 import useDataGame from "../components/Games/hook/useDataGame";
 
 const Games = () => {
-
     useEffect(() => {
         document.title = "Sucursales";
     }, []);
@@ -14,8 +13,17 @@ const Games = () => {
     const {
         activeTab,
         setActiveTab,
-        id,
-        setId,
+        games,
+        setGames,
+        loading,
+        setLoading,
+        error,
+        setError,
+        handleSubmit,
+        deleteGames,
+        updateGames,
+        handleUpdate,
+        cleanData,
         gameName,
         setGameName,
         gameCategory,
@@ -24,18 +32,8 @@ const Games = () => {
         setGameMinBet,
         gameMaxBet,
         setGameMaxBet,
-        Games,
-        setGames,
-        loading,
-        setLoading,
-        success,
-        setSuccess,
-        error,
-        setError,
-        handleSubmit,
-        deleteGames,
-        updateGames,
-        handleUpdate,
+        id,
+        setId,
     } = useDataGame();
 
     return (
@@ -54,7 +52,7 @@ const Games = () => {
                             className="px-4 py-2 text-gray-600 hover:text-gray-800 focus:outline-none focus:border-b-2 focus:border-blue-500"
                             onClick={() => {
                                 setActiveTab("form");
-                                cleanData(); // Asegúrate de que esta función limpia los datos correctamente
+                                cleanData();
                             }}
                         >
                             Gestionar Juegos
@@ -62,45 +60,36 @@ const Games = () => {
                     </div>
                     <div>
                         {activeTab === "list" && (
-                            <div>
-                                <GameList
-                                    Games={Games}
-                                    setGames={setGames}
-                                    loading={loading}
-                                    setLoading={setLoading}
-                                    error={error}
-                                    setError={setError}
-                                    deleteGames={deleteGames}
-                                    updateGames={updateGames}
-                                    setId={setId}
-                                    setActiveTab={setActiveTab}
-                                    handleUpdate={handleUpdate}
-                                />
-                            </div>
+                            <GameList
+                                game={games}
+                                setGames={setGames}
+                                loading={loading}
+                                setLoading={setLoading}
+                                error={error}
+                                setError={setError}
+                                deleteGame={deleteGames}
+                                updateGame={updateGames}
+                            />
                         )}
                         {activeTab === "form" && (
-                            <div>
-                                <RegisterGames
+                            <RegisterGames
                                 handleUpdate={handleUpdate}
-                                    gameName={gameName}
-                                    setGameName={setGameName}
-                                    gameCategory={gameCategory}
-                                    setGameCategory={setGameCategory}
-                                    gameMinBet={gameMinBet}
-                                    setGameMinBet={setGameMinBet}
-                                    gameMaxBet={gameMaxBet}
-                                    setGameMaxBet={setGameMaxBet}
-                                    handleSubmit={handleSubmit}
-                                    loading={loading}
-                                    setLoading={setLoading}
-                                    success={success}
-                                    setSuccess={setSuccess}
-                                    error={error}
-                                    setError={setError}
-                                    id={id}
-                                    setId={setId}
-                                />
-                            </div>
+                                gameName={gameName}
+                                setGameName={setGameName}
+                                gameCategory={gameCategory}
+                                setGameCategory={setGameCategory}
+                                gameMinBet={gameMinBet}
+                                setGameMinBet={setGameMinBet}
+                                gameMaxBet={gameMaxBet}
+                                setGameMaxBet={setGameMaxBet}
+                                handleSubmit={handleSubmit}
+                                loading={loading}
+                                setLoading={setLoading}
+                                error={error}
+                                setError={setError}
+                                id={id}
+                                setId={setId}
+                            />
                         )}
                     </div>
                 </div>
@@ -111,11 +100,7 @@ const Games = () => {
                 }}
             />
         </div>
-
-
     );
-
-    
-}
+};
 
 export default Games;
