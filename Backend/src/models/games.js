@@ -12,8 +12,7 @@ const GamesSchema = new Schema({
     },
     apuestaMinima: {
         type: Number,
-        required: true,
-        min: 0
+        required: true
     },
     apuestaMaxima: {
         type: Number,

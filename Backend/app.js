@@ -1,8 +1,9 @@
 //importo todos los elemnetos de la ibreria express 
 
 import express from "express";
+import gameRoutes from "../Backend/src/routes/games.js"; 
+import clientRoutes from "../Backend/src/routes/clients.js";
 
-//creo una contante d ela libreria que acabo de importar y la ejecuto
 
 const app = express();
 
@@ -10,7 +11,8 @@ const app = express();
 
 
 app.use(express.json());
-//app.use("/api/products",productRoutes);
+app.use("/api/games", gameRoutes); 
+app.use("/api/clients", clientRoutes);
 
 
 
