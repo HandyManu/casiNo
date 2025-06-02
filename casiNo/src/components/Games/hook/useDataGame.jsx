@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
 const useDataGame = () => {
-    const ApiGames = "http://localhost:4000/api/games";
+    const ApiGames = "https://casino-7bls.onrender.com/api/games";
 
     const [activeTab, setActiveTab] = useState("list");
     const [id, setId] = useState("");

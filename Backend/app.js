@@ -15,7 +15,8 @@ const app = express();
 app.use(express.json());
 app.use(
     cors({
-      origin: "http://localhost:5173",
+      origin: "https://casi-no.vercel.app",   
+      //https://casi-no.vercel.app/
       // Permitir envío de cookies y credenciales
       credentials: true
     })
